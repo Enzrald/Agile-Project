@@ -42,7 +42,7 @@ const Login = () => {
 
         onLogin();
     }
-    const onLogin = () => navigation.navigate('HomeScreen');
+    const onLogin = () => navigation.navigate('MainDrawer');
     return (
         <SafeAreaView style={Styles.container}>
             <View style={Styles.header}>
@@ -71,7 +71,7 @@ const Login = () => {
                     <Text style={Styles.textRegister}>Don't have an account? Register</Text>
                 </TouchableOpacity>
                 <Spacer height={50} />
-                <TouchableButon title={'Login'} textStyle={{ color: 'white' }} buttonStyle={{ backgroundColor: '#8F5D08' }} onPress={() => onValidate()} />
+                <TouchableButon title={'Login'} textStyle={{ color: 'white' }} buttonStyle={{ backgroundColor: '#8F5D08' }} onPress={() => onLogin()} />
             </View>
         </SafeAreaView>
     );
