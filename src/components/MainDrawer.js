@@ -165,6 +165,8 @@ const Styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: 'black',
     borderWidth: 4,
+    marginBottom: 5,
+    marginTop: 15,
   },
   titleHeader: {
     fontWeight: 'bold',
