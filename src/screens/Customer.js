@@ -1,5 +1,189 @@
+import { View, StyleSheet, FlatList, Text, Image, TouchableOpacity, Alert } from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
+import Spacer from "../components/Spacer";
+import { useEffect, useRef, useState } from "react";
+import Ionicons from "react-native-vector-icons/Ionicons"
+
 const Customer = () => {
-    return (<></>)
+    const ref = useRef();
+    const [data, setData] = useState([
+        {
+            id: 0,
+            avatar: 'https://i.pinimg.com/564x/6e/06/73/6e0673366051335bdc1c245e4664dd05.jpg',
+            name: 'Nguyen Sy Tung',
+            email: 'tungnsph25350@fpt.edu.vn',
+            address: 'Van Canh - Hoai Duc - Ha Noi'
+        },
+        {
+            id: 1,
+            avatar: 'https://i.pinimg.com/564x/6e/06/73/6e0673366051335bdc1c245e4664dd05.jpg',
+            name: 'nstungg',
+            email: 'tungnsph25350@fpt.edu.vn',
+            address: 'Van Canh - Hoai Duc - Ha Noi'
+        }
+    ]);
+
+
+    const itemView = (item) => {
+        return (
+            <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
+                <View style={Styles.item}>
+                    <View style={Styles.avatarContainer}>
+                        <Image
+                            source={{ uri: item.avatar }}
+                            style={Styles.avatar}
+                        />
+                    </View>
+                    <View style={Styles.info}>
+                        <View style={Styles.rowInfo}>
+                            <Text style={Styles.name}>{item.name}</Text>
+                        </View>
+                        <Spacer height={5} />
+                        <View style={Styles.rowInfo}>
+                            <Text style={Styles.email}>{item.email}</Text>
+                        </View>
+                        {/* <Spacer height={5} />
+                        <View style={Styles.rowInfo}>
+                            <Text style={Styles.address}>{item.address}</Text>
+                        </View> */}
+                    </View>
+                </View>
+            </Swipeable>
+        );
+    }
+
+    const rightSwipe = (id) => {
+        return (
+            <View style={Styles.containerSwpie}>
+                <TouchableOpacity style={Styles.editSwipe} onPress={() => onEdit(id)} >
+                    <Ionicons name='create-sharp' color={'white'} size={30} />
+                </TouchableOpacity>
+                <TouchableOpacity style={Styles.deleteSwipe} onPress={() => onDelete(id)} >
+                    <Ionicons name='trash-sharp' color={'white'} size={30} />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    const onEdit = idUpdate => {
+        
+    }
+
+    const onDelete = idDelete => {
+        Alert.alert(
+            'Xóa User?',
+            `Bạn có muốn xóa User có ID = ${idDelete}?`,
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => { ref.current?.close() },
+                    style: 'cancel'
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        const dataNew = data.filter(item => item.id !== idDelete);
+                        setData(dataNew);
+                    },
+                }
+            ]
+        );
+    }
+
+    return (
+        <View>
+            {data.length == 0 ? null :
+                <FlatList
+                    data={data}
+                    // ListHeaderComponent={
+                    //     <>
+                    //         <Spacer height={20} />
+                    //         <Text style={Styles.listHeaderLine}>Shop Manager</Text>
+                    //     </>
+                    // }
+                    ListHeaderComponentStyle={Styles.listHeader}
+                    // ItemSeparatorComponent={<View style={Styles.separator} />}
+                    renderItem={
+                        ({ item }) => itemView(item)
+                    }
+                    keyExtractor={(item) => item.id}
+                />}
+        </View>
+    )
 }
 
 export default Customer;
+
+const Styles = StyleSheet.create({
+    // listHeader: {
+    //     height: 55,
+    //     alignItems: 'center',
+    //     justifyContent: "center",
+    // },
+    // listHeaderLine: {
+    //     color: '#333',
+    //     fontSize: 21,
+    //     fontWeight: 'bold',
+    // },
+    item: {
+        flex: 1,
+        flexDirection: 'row',
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+    },
+    avatarContainer: {
+        height: 120,
+        width: 120,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    avatar: {
+        width: 120,
+        height: 120,
+        borderRadius: 3,
+        borderColor: 'black',
+        borderWidth: 0,
+    },
+    info: {
+        marginTop: 5,
+    },
+    rowInfo: {
+        flexDirection: 'row',
+    },
+    name: {
+        fontWeight: '600',
+        fontSize: 16,
+        marginLeft: 13,
+    },
+    email: {
+        fontSize: 14,
+        marginLeft: 13,
+    },
+    // address: {
+    //     fontSize: 14,
+    //     marginLeft: 13,
+    // },
+    containerSwpie: {
+        backgroundColor: 'white',
+        height: '100%',
+    },
+    editSwipe: {
+        width: 100,
+        height: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#0F9D58',
+    },
+    deleteSwipe: {
+        width: 100,
+        height: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FF4444',
+    },
+    // separator: {
+    //     height: 1,
+    //     width: '100%',
+    //     backgroundColor: '#cccccc',
+    // },
+});
