@@ -1,7 +1,7 @@
 import { View, StyleSheet, FlatList, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Spacer from "../components/Spacer";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"
 
 const Customer = () => {
@@ -9,22 +9,29 @@ const Customer = () => {
     const [data, setData] = useState([
         {
             id: 0,
-            avatar: 'https://i.pinimg.com/564x/6e/06/73/6e0673366051335bdc1c245e4664dd05.jpg',
+            avatar: 'https://i.pinimg.com/564x/64/37/05/64370541d9b8e5107b33afe98bc2b988.jpg',
             name: 'Nguyen Sy Tung',
             email: 'tungnsph25350@fpt.edu.vn',
             address: 'Van Canh - Hoai Duc - Ha Noi'
         },
         {
             id: 1,
-            avatar: 'https://i.pinimg.com/564x/6e/06/73/6e0673366051335bdc1c245e4664dd05.jpg',
+            avatar: 'https://i.pinimg.com/564x/4f/61/28/4f6128a7b8008fee5e674056a6867642.jpg',
             name: 'nstungg',
             email: 'tungnsph25350@fpt.edu.vn',
             address: 'Van Canh - Hoai Duc - Ha Noi'
-        }
+        },
+        {
+            id: 2,
+            avatar: 'https://i.pinimg.com/564x/63/1d/21/631d21d0ebe8c726b8074b7de28a6dc5.jpg',
+            name: 'nstung7323',
+            email: 'tungnsph25350@fpt.edu.vn',
+            address: 'Van Canh - Hoai Duc - Ha Noi'
+        },
     ]);
 
 
-    const itemView = (item) => {
+    const itemView = item => {
         return (
             <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
                 <View style={Styles.item}>
@@ -55,7 +62,7 @@ const Customer = () => {
     const rightSwipe = (id) => {
         return (
             <View style={Styles.containerSwpie}>
-                <TouchableOpacity style={Styles.editSwipe} onPress={() => onEdit(id)} >
+                <TouchableOpacity style={Styles.editSwipe} onPress={() => ref.current?.close()} >
                     <Ionicons name='create-sharp' color={'white'} size={30} />
                 </TouchableOpacity>
                 <TouchableOpacity style={Styles.deleteSwipe} onPress={() => onDelete(id)} >
@@ -65,10 +72,6 @@ const Customer = () => {
         );
     }
 
-    const onEdit = idUpdate => {
-        
-    }
-
     const onDelete = idDelete => {
         Alert.alert(
             'Xóa User?',
@@ -76,7 +79,7 @@ const Customer = () => {
             [
                 {
                     text: "Cancel",
-                    onPress: () => { ref.current?.close() },
+                    onPress: () => ref.current?.close(),
                     style: 'cancel'
                 },
                 {
