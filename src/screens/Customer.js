@@ -104,7 +104,7 @@ const Customer = () => {
                     //         <Text style={Styles.listHeaderLine}>Shop Manager</Text>
                     //     </>
                     // }
-                    ListHeaderComponentStyle={Styles.listHeader}
+                    // ListHeaderComponentStyle={Styles.listHeader}
                     // ItemSeparatorComponent={<View style={Styles.separator} />}
                     renderItem={
                         ({ item }) => itemView(item)

@@ -1,33 +1,13 @@
-import { FlatList, TouchableOpacity, View, Image, StyleSheet, Text } from "react-native";
+import { FlatList, TouchableOpacity, View, Image, StyleSheet, Text, Alert } from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
 import Spacer from "../components/Spacer";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import Ionicons from "react-native-vector-icons/Ionicons"
+
 const Product = () => {
+    const ref = useRef();
     const [selectCategory, setSelectCategory] = useState(null);
-
-    const category = [
-        {
-            id: 0,
-            name: 'Cafe',
-            img: 'https://i.pinimg.com/564x/ef/87/39/ef8739578ff5ccfdf76b381bd4627ecb.jpg',
-        },
-        {
-            id: 1,
-            name: 'Hi-Tea Soda',
-            img: 'https://i.pinimg.com/564x/e9/9c/8c/e99c8c7bb773ee8b62bb506398aaed52.jpg',
-        },
-        {
-            id: 2,
-            name: 'Cafe Cup',
-            img: 'https://i.pinimg.com/474x/97/9a/12/979a12cae125784267bc3c83a648e479.jpg',
-        },
-        {
-            id: 3,
-            name: 'Frosty',
-            img: 'https://i.pinimg.com/474x/b6/b7/fd/b6b7fd021bf9e617cbc140fb73774204.jpg',
-        },
-    ];
-
-    const product = [
+    const [product, setProduct] = useState([
         {
             id: 0,
             idCategory: 0,
@@ -84,7 +64,64 @@ const Product = () => {
             price: 59000,
             desc: 'Caramel Macchiato sẽ mang đến một sự ngạc nhiên thú vị, ...',
         },
+    ]);
+
+    const category = [
+        {
+            id: 0,
+            name: 'Cafe',
+            img: 'https://i.pinimg.com/564x/ef/87/39/ef8739578ff5ccfdf76b381bd4627ecb.jpg',
+        },
+        {
+            id: 1,
+            name: 'Hi-Tea Soda',
+            img: 'https://i.pinimg.com/564x/e9/9c/8c/e99c8c7bb773ee8b62bb506398aaed52.jpg',
+        },
+        {
+            id: 2,
+            name: 'Cafe Cup',
+            img: 'https://i.pinimg.com/474x/97/9a/12/979a12cae125784267bc3c83a648e479.jpg',
+        },
+        {
+            id: 3,
+            name: 'Frosty',
+            img: 'https://i.pinimg.com/474x/b6/b7/fd/b6b7fd021bf9e617cbc140fb73774204.jpg',
+        },
     ];
+
+    const rightSwipe = (id) => {
+        return (
+            <View style={Styles.containerSwpie}>
+                <TouchableOpacity style={Styles.editSwipe} onPress={() => ref.current?.close()} >
+                    <Ionicons name='create-sharp' color={'white'} size={30} />
+                </TouchableOpacity>
+                <TouchableOpacity style={Styles.deleteSwipe} onPress={() => onDelete(id)} >
+                    <Ionicons name='trash-sharp' color={'white'} size={30} />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    const onDelete = idDelete => {
+        Alert.alert(
+            'Xóa User?',
+            `Bạn có muốn xóa User có ID = ${idDelete}?`,
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => ref.current?.close(),
+                    style: 'cancel'
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        const dataNew = product.filter(item => item.id !== idDelete);
+                        setProduct(dataNew);
+                    },
+                }
+            ]
+        );
+    }
 
     return (
         <View style={Styles.container}>
@@ -119,25 +156,8 @@ const Product = () => {
                     <>
                         {
                             selectCategory === null ?
-                                <View style={Styles.itemProduct}>
-                                    <View style={Styles.imgProductContainer}>
-                                        <Image
-                                            source={{ uri: item.img }}
-                                            style={Styles.imgProduct}
-                                        />
-                                    </View>
-                                    <View style={Styles.infoProduct}>
-                                        <View style={Styles.rowInfoProduct}>
-                                            <Text numberOfLines={2} style={Styles.nameProduct}>{item.name}</Text>
-                                        </View>
-                                        <Spacer height={5} />
-                                        <View style={Styles.rowInfoProduct}>
-                                            <Text style={Styles.priceProduct}>{item.price}đ</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                : item.idCategory === selectCategory ?
-                                    <View style={Styles.itemProduct}>
+                                <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
+                                    <View  style={Styles.itemProduct}>
                                         <View style={Styles.imgProductContainer}>
                                             <Image
                                                 source={{ uri: item.img }}
@@ -154,6 +174,27 @@ const Product = () => {
                                             </View>
                                         </View>
                                     </View>
+                                </Swipeable>
+                                : item.idCategory === selectCategory ?
+                                    <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
+                                        <View style={Styles.itemProduct}>
+                                            <View style={Styles.imgProductContainer}>
+                                                <Image
+                                                    source={{ uri: item.img }}
+                                                    style={Styles.imgProduct}
+                                                />
+                                            </View>
+                                            <View style={Styles.infoProduct}>
+                                                <View style={Styles.rowInfoProduct}>
+                                                    <Text numberOfLines={2} style={Styles.nameProduct}>{item.name}</Text>
+                                                </View>
+                                                <Spacer height={5} />
+                                                <View style={Styles.rowInfoProduct}>
+                                                    <Text style={Styles.priceProduct}>{item.price}đ</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </Swipeable>
                                     : null
                         }
                     </>
@@ -242,5 +283,23 @@ const Styles = StyleSheet.create({
     priceProduct: {
         fontSize: 14,
         marginLeft: 13,
+    },
+    containerSwpie: {
+        backgroundColor: 'white',
+        height: '100%',
+    },
+    editSwipe: {
+        width: 100,
+        height: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#0F9D58',
+    },
+    deleteSwipe: {
+        width: 100,
+        height: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FF4444',
     },
 });
