@@ -94,7 +94,7 @@ const Customer = () => {
     }
 
     return (
-        <View>
+        <View style={Styles.container}>
             {data.length == 0 ? null :
                 <FlatList
                     data={data}
@@ -118,6 +118,10 @@ const Customer = () => {
 export default Customer;
 
 const Styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'white',
+        flex: 1,
+    },
     // listHeader: {
     //     height: 55,
     //     alignItems: 'center',
