@@ -105,7 +105,7 @@ const Product = () => {
     const onDelete = idDelete => {
         Alert.alert(
             'Xóa User?',
-            `Bạn có muốn xóa User có ID = ${idDelete}?`,
+            `Bạn có muốn xóa Product có ID = ${idDelete}?`,
             [
                 {
                     text: "Cancel",
@@ -154,10 +154,29 @@ const Product = () => {
                 data={product}
                 renderItem={({ item }) => (
                     <>
-                        {
-                            selectCategory === null ?
+                        {selectCategory === null ?
+                            <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
+                                <View style={Styles.itemProduct}>
+                                    <View style={Styles.imgProductContainer}>
+                                        <Image
+                                            source={{ uri: item.img }}
+                                            style={Styles.imgProduct}
+                                        />
+                                    </View>
+                                    <View style={Styles.infoProduct}>
+                                        <View style={Styles.rowInfoProduct}>
+                                            <Text numberOfLines={2} style={Styles.nameProduct}>{item.name}</Text>
+                                        </View>
+                                        <Spacer height={5} />
+                                        <View style={Styles.rowInfoProduct}>
+                                            <Text style={Styles.priceProduct}>{item.price}đ</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </Swipeable>
+                            : item.idCategory === selectCategory ?
                                 <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
-                                    <View  style={Styles.itemProduct}>
+                                    <View style={Styles.itemProduct}>
                                         <View style={Styles.imgProductContainer}>
                                             <Image
                                                 source={{ uri: item.img }}
@@ -175,27 +194,7 @@ const Product = () => {
                                         </View>
                                     </View>
                                 </Swipeable>
-                                : item.idCategory === selectCategory ?
-                                    <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
-                                        <View style={Styles.itemProduct}>
-                                            <View style={Styles.imgProductContainer}>
-                                                <Image
-                                                    source={{ uri: item.img }}
-                                                    style={Styles.imgProduct}
-                                                />
-                                            </View>
-                                            <View style={Styles.infoProduct}>
-                                                <View style={Styles.rowInfoProduct}>
-                                                    <Text numberOfLines={2} style={Styles.nameProduct}>{item.name}</Text>
-                                                </View>
-                                                <Spacer height={5} />
-                                                <View style={Styles.rowInfoProduct}>
-                                                    <Text style={Styles.priceProduct}>{item.price}đ</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </Swipeable>
-                                    : null
+                                : null
                         }
                     </>
                 )}

@@ -1,8 +1,11 @@
-import { useState } from "react";
-import { FlatList, StyleSheet, View, Image, Text } from "react-native";
+import { useRef, useState } from "react";
+import { FlatList, StyleSheet, View, Image, Text, TouchableOpacity, Alert } from "react-native";
 import Spacer from "../components/Spacer";
+import { Swipeable } from "react-native-gesture-handler";
+import Ionicons from "react-native-vector-icons/Ionicons"
 
 const Staff = () => {
+    const ref = useRef();
     const [staff, setStaff] = useState([
         {
             id: 0,
@@ -45,42 +48,80 @@ const Staff = () => {
             avatar: 'https://i.pinimg.com/564x/e8/52/06/e852065dc5049e021ffaf0d710fd4723.jpg',
         },
     ]);
+
+    const rightSwipe = (id) => {
+        return (
+            <View style={Styles.containerSwpie}>
+                <TouchableOpacity style={Styles.editSwipe} onPress={() => ref.current?.close()} >
+                    <Ionicons name='create-sharp' color={'white'} size={30} />
+                </TouchableOpacity>
+                <TouchableOpacity style={Styles.deleteSwipe} onPress={() => onDelete(id)} >
+                    <Ionicons name='trash-sharp' color={'white'} size={30} />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    const onDelete = idDelete => {
+        Alert.alert(
+            'Xóa User?',
+            `Bạn có muốn xóa Staff có ID = ${idDelete}?`,
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => ref.current?.close(),
+                    style: 'cancel'
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        const dataNew = staff.filter(item => item.id !== idDelete);
+                        setStaff(dataNew);
+                    },
+                }
+            ]
+        );
+    }
+
     return (
         <View style={Styles.container}>
-            <FlatList
-                style={Styles.containerStaff}
-                data={staff}
-                renderItem={({ item }) => (
-                    <View style={Styles.item}>
-                        <View style={Styles.avatarContainer}>
-                            <Image
-                                source={{ uri: item.avatar }}
-                                style={Styles.avatar}
-                            />
-                        </View>
-                        <View style={Styles.infoStaff}>
-                            <View style={Styles.rowInfoStaff}>
-                                <Text numberOfLines={2} style={Styles.name}>{item.name}</Text>
-                            </View>
-                            <Spacer height={5} />
-                            <View style={Styles.rowInfoStaff}>
-                                <Text style={Styles.position}>{item.position}</Text>
-                            </View>
-                            <View style={Styles.contactInfoStaff}>
-                                <View style={Styles.rowInfoStaff}>
-                                    <Text style={Styles.phone}>Phone: {item.phone}</Text>
+            {staff.length === 0 ? null :
+                <FlatList
+                    style={Styles.containerStaff}
+                    data={staff}
+                    renderItem={({ item }) => (
+                        <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
+                            <View style={Styles.item}>
+                                <View style={Styles.avatarContainer}>
+                                    <Image
+                                        source={{ uri: item.avatar }}
+                                        style={Styles.avatar}
+                                    />
                                 </View>
-                                <Spacer height={2} />
-                                <View style={Styles.rowInfoStaff}>
-                                    <Text style={Styles.email}>Email: {item.email}</Text>
+                                <View style={Styles.infoStaff}>
+                                    <View style={Styles.rowInfoStaff}>
+                                        <Text numberOfLines={2} style={Styles.name}>{item.name}</Text>
+                                    </View>
+                                    <Spacer height={5} />
+                                    <View style={Styles.rowInfoStaff}>
+                                        <Text style={Styles.position}>{item.position}</Text>
+                                    </View>
+                                    <View style={Styles.contactInfoStaff}>
+                                        <View style={Styles.rowInfoStaff}>
+                                            <Text style={Styles.phone}>Phone: {item.phone}</Text>
+                                        </View>
+                                        <Spacer height={2} />
+                                        <View style={Styles.rowInfoStaff}>
+                                            <Text style={Styles.email}>Email: {item.email}</Text>
+                                        </View>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                    </View>
-                )}
-                keyExtractor={item => item.id.toString()}
-                showsVerticalScrollIndicator={false}
-            />
+                        </Swipeable>
+                    )}
+                    keyExtractor={item => item.id.toString()}
+                    showsVerticalScrollIndicator={false}
+                />}
         </View>
     );
 }
@@ -145,5 +186,23 @@ const Styles = StyleSheet.create({
     email: {
         marginLeft: 13,
         fontSize: 13,
-    }
+    },
+    containerSwpie: {
+        backgroundColor: 'white',
+        height: '100%',
+    },
+    editSwipe: {
+        width: 100,
+        height: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#0F9D58',
+    },
+    deleteSwipe: {
+        width: 100,
+        height: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FF4444',
+    },
 });

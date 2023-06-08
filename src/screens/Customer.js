@@ -6,7 +6,7 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 
 const Customer = () => {
     const ref = useRef();
-    const [data, setData] = useState([
+    const [customer, setCustomer] = useState([
         {
             id: 0,
             avatar: 'https://i.pinimg.com/564x/64/37/05/64370541d9b8e5107b33afe98bc2b988.jpg',
@@ -85,8 +85,8 @@ const Customer = () => {
                 {
                     text: "OK",
                     onPress: () => {
-                        const dataNew = data.filter(item => item.id !== idDelete);
-                        setData(dataNew);
+                        const dataNew = customer.filter(item => item.id !== idDelete);
+                        setCustomer(dataNew);
                     },
                 }
             ]
@@ -95,10 +95,10 @@ const Customer = () => {
 
     return (
         <View style={Styles.container}>
-            {data.length == 0 ? null :
+            {customer.length == 0 ? null :
                 <FlatList
-                style={Styles.containerCustomer}
-                    data={data}
+                    style={Styles.containerCustomer}
+                    data={customer}
                     // ListHeaderComponent={
                     //     <>
                     //         <Spacer height={20} />
@@ -111,7 +111,8 @@ const Customer = () => {
                         ({ item }) => itemView(item)
                     }
                     keyExtractor={(item) => item.id}
-                />}
+                />
+            }
         </View>
     )
 }
