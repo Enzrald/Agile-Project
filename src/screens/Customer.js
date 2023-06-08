@@ -97,6 +97,7 @@ const Customer = () => {
         <View style={Styles.container}>
             {data.length == 0 ? null :
                 <FlatList
+                style={Styles.containerCustomer}
                     data={data}
                     // ListHeaderComponent={
                     //     <>
@@ -120,6 +121,10 @@ export default Customer;
 const Styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
+        flex: 1,
+    },
+    containerCustomer: {
+        marginTop: 10,
         flex: 1,
     },
     // listHeader: {
@@ -147,7 +152,7 @@ const Styles = StyleSheet.create({
     avatar: {
         width: 120,
         height: 120,
-        borderRadius: 3,
+        borderRadius: 10,
         borderColor: 'black',
         borderWidth: 0,
     },
