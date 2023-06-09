@@ -1,8 +1,8 @@
+import { useState, useRef } from "react";
 import { FlatList, TouchableOpacity, View, Image, StyleSheet, Text, Alert } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
-import Spacer from "../components/Spacer";
-import { useState, useRef } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"
+import Spacer from "../components/Spacer";
 import FormatCurrency from "../helpers/FormatCurrency";
 
 const Product = () => {

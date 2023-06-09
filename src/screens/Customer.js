@@ -1,8 +1,8 @@
+import { useRef, useState } from "react";
 import { View, StyleSheet, FlatList, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
-import Spacer from "../components/Spacer";
-import { useRef, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"
+import Spacer from "../components/Spacer";
 
 const Customer = () => {
     const ref = useRef();

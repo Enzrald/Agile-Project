@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { FlatList, StyleSheet, View, Image, Text, TouchableOpacity, Alert } from "react-native";
-import Spacer from "../components/Spacer";
 import { Swipeable } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons"
+import Spacer from "../components/Spacer";
 
 const Staff = () => {
     const ref = useRef();
