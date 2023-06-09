@@ -3,6 +3,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import Spacer from "../components/Spacer";
 import { useState, useRef } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons"
+import FormatCurrency from "../helpers/formatCurrency";
 
 const Product = () => {
     const ref = useRef();
@@ -169,7 +170,7 @@ const Product = () => {
                                         </View>
                                         <Spacer height={5} />
                                         <View style={Styles.rowInfoProduct}>
-                                            <Text style={Styles.priceProduct}>{item.price}đ</Text>
+                                            <Text style={Styles.priceProduct}>{FormatCurrency(item.price)}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -189,7 +190,7 @@ const Product = () => {
                                             </View>
                                             <Spacer height={5} />
                                             <View style={Styles.rowInfoProduct}>
-                                                <Text style={Styles.priceProduct}>{item.price}đ</Text>
+                                                <Text style={Styles.priceProduct}>{FormatCurrency(item.price)}</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -256,8 +257,6 @@ const Styles = StyleSheet.create({
     imgProductContainer: {
         height: 120,
         width: 120,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     imgProduct: {
         width: 120,
