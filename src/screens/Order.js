@@ -1,9 +1,12 @@
-import { FlatList, StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { FlatList, StyleSheet, View, Text, TouchableOpacity, Image, Alert } from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
+import Ionicons from "react-native-vector-icons/Ionicons"
 import Spacer from "../components/Spacer";
 import FormatCurrency from "../helpers/FormatCurrency";
 
 const Order = () => {
+    const ref = useRef();
     const [selectedItem, setSelectedItem] = useState(0);
     const statusOrder = [
         {
@@ -77,7 +80,7 @@ const Order = () => {
             desc: 'Caramel Macchiato sẽ mang đến một sự ngạc nhiên thú vị, ...',
         },
     ];
-    const order = [
+    const [order, setOrder] = useState([
         {
             id: 0,
             statusOrder: 0,
@@ -102,7 +105,7 @@ const Order = () => {
             date: '09/06/2023',
             time: '00:42',
         },
-    ];
+    ]);
     const orderDetail = [
         {
             id: 0,
@@ -215,25 +218,61 @@ const Order = () => {
         }
     }
 
+    const rightSwipe = (id) => {
+        return (
+            <View style={Styles.containerSwpie}>
+                <TouchableOpacity style={Styles.editSwipe} onPress={() => ref.current?.close()} >
+                    <Ionicons name='create-sharp' color={'white'} size={30} />
+                </TouchableOpacity>
+                <TouchableOpacity style={Styles.deleteSwipe} onPress={() => onDelete(id)} >
+                    <Ionicons name='trash-sharp' color={'white'} size={30} />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    const onDelete = idDelete => {
+        Alert.alert(
+            'Xóa Order?',
+            `Bạn có muốn xóa Order có ID = ${idDelete}?`,
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => ref.current?.close(),
+                    style: 'cancel'
+                },
+                {
+                    text: "OK",
+                    onPress: () => {
+                        const dataNew = order.filter(item => item.id !== idDelete);
+                        setOrder(dataNew);
+                    },
+                }
+            ]
+        );
+    }
+
     const itemViewOrder = (item) => (
         <>
             {item.statusOrder === selectedItem ?
-                <View style={[Styles.itemOrder, checkSeparator(item) && Styles.itemOrderSeparator]}>
-                    <View style={Styles.imgOrderContainer}>
-                        <Image
-                            style={Styles.imgOrder}
-                            source={{ uri: 'https://i.pinimg.com/564x/44/eb/bf/44ebbf137cf770e9a5c3ae39da5c323b.jpg' }}
-                        />
+                <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
+                    <View style={[Styles.itemOrder, checkSeparator(item) && Styles.itemOrderSeparator]}>
+                        <View style={Styles.imgOrderContainer}>
+                            <Image
+                                style={Styles.imgOrder}
+                                source={{ uri: 'https://i.pinimg.com/564x/44/eb/bf/44ebbf137cf770e9a5c3ae39da5c323b.jpg' }}
+                            />
+                        </View>
+                        <View style={Styles.infoOrder}>
+                            <Text numberOfLines={2} style={Styles.infoNameProductOrder}>{getInfoProductFromOrder(item.id, 'getName()')}</Text>
+                            <Spacer height={10} />
+                            <Text style={Styles.infoDateTimeProductOrder}>{item.time} - {item.date}</Text>
+                        </View>
+                        <View style={Styles.infoPriceOrder}>
+                            <Text style={Styles.infoPriceProductOrder}>{FormatCurrency(getInfoProductFromOrder(item.id, 'getPrice()'))}</Text>
+                        </View>
                     </View>
-                    <View style={Styles.infoOrder}>
-                        <Text numberOfLines={2} style={Styles.infoNameProductOrder}>{getInfoProductFromOrder(item.id, 'getName()')}</Text>
-                        <Spacer height={10} />
-                        <Text style={Styles.infoDateTimeProductOrder}>{item.time} - {item.date}</Text>
-                    </View>
-                    <View style={Styles.infoPriceOrder}>
-                        <Text style={Styles.infoPriceProductOrder}>{FormatCurrency(getInfoProductFromOrder(item.id, 'getPrice()'))}</Text>
-                    </View>
-                </View>
+                </Swipeable>
                 : null
             }
         </>
@@ -350,5 +389,23 @@ const Styles = StyleSheet.create({
         color: '#333',
         alignContent: 'flex-end',
         fontSize: 16,
+    },
+    containerSwpie: {
+        backgroundColor: 'white',
+        height: '100%',
+    },
+    editSwipe: {
+        width: 100,
+        height: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#0F9D58',
+    },
+    deleteSwipe: {
+        width: 100,
+        height: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FF4444',
     },
 });
