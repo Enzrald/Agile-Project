@@ -64,7 +64,7 @@ const Staff = () => {
 
     const onDelete = idDelete => {
         Alert.alert(
-            'Xóa User?',
+            'Xóa Staff?',
             `Bạn có muốn xóa Staff có ID = ${idDelete}?`,
             [
                 {

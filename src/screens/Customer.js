@@ -74,8 +74,8 @@ const Customer = () => {
 
     const onDelete = idDelete => {
         Alert.alert(
-            'Xóa User?',
-            `Bạn có muốn xóa User có ID = ${idDelete}?`,
+            'Xóa Customer?',
+            `Bạn có muốn xóa Customer có ID = ${idDelete}?`,
             [
                 {
                     text: "Cancel",

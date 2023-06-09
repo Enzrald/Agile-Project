@@ -105,7 +105,7 @@ const Product = () => {
 
     const onDelete = idDelete => {
         Alert.alert(
-            'Xóa User?',
+            'Xóa Product?',
             `Bạn có muốn xóa Product có ID = ${idDelete}?`,
             [
                 {
