@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useState } from "react";
 import Spacer from "../components/Spacer";
-import FormatCurrency from "../helpers/formatCurrency";
+import FormatCurrency from "../helpers/FormatCurrency";
 
 const Order = () => {
     const [selectedItem, setSelectedItem] = useState(0);
