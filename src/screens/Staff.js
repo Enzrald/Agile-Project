@@ -1,68 +1,43 @@
-import { useRef, useState } from "react";
-import { FlatList, StyleSheet, View, Image, Text, TouchableOpacity, Alert } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { FlatList, StyleSheet, View, Image, Text, TouchableOpacity, Alert, } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import Spacer from "../components/Spacer";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 const Staff = () => {
+    const navigation = useNavigation();
     const ref = useRef();
-    const [staff, setStaff] = useState([
-        {
-            id: 0,
-            name: 'Nguyen Sy Tung',
-            age: 20,
-            phone: '0987123645',
-            email: 'nstung2003@gmail.com',
-            address: 'Van Canh, Hoai Duc, Ha Noi',
-            position: 'Coder',
-            avatar: 'https://i.pinimg.com/564x/6b/31/33/6b31330ed51b2641e2f19cd73da784d3.jpg',
-        },
-        {
-            id: 1,
-            name: 'Nguyen Thu Huyen',
-            age: 20,
-            phone: '0321456987',
-            email: 'nthuyen@gmail.com',
-            address: 'Van Canh, Hoai Duc, Ha Noi',
-            position: 'Leader',
-            avatar: 'https://i.pinimg.com/564x/04/b1/b6/04b1b61ac7cca51296cac1beb0ba6592.jpg',
-        },
-        {
-            id: 2,
-            name: 'Vu Ngoc Hanh',
-            age: 19,
-            phone: '0765123487',
-            email: 'vnhanh@gmail.com',
-            address: 'Ngai Cau, An Khanh, Ha Noi',
-            position: 'Scum Master',
-            avatar: 'https://i.pinimg.com/564x/8f/8d/c9/8f8dc9f31e18655f6fcf35b136c976f0.jpg',
-        },
-        {
-            id: 3,
-            name: 'Tran Ngan Ha',
-            age: 19,
-            phone: '0765123487',
-            email: 'tnha@gmail.com',
-            address: 'Xuan Phuong, Nam Tu Liem, Ha Noi',
-            position: 'Product Owner',
-            avatar: 'https://i.pinimg.com/564x/e8/52/06/e852065dc5049e021ffaf0d710fd4723.jpg',
-        },
-    ]);
+    const isFocused = useIsFocused();
+    const [list, setList] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
-    const rightSwipe = (id) => {
+    const getList = () => {
+        fetch('http://192.168.1.3:3000/api/getStaff')
+            .then(response => response.json())
+            .then((data) => { setList(data); setLoading(false); })
+            .then((error) => console.log(error))
+    }
+    useEffect(() => {
+        getList()
+    }, [isFocused]);
+
+
+
+    const rightSwipe = (item) => {
         return (
             <View style={Styles.containerSwpie}>
-                <TouchableOpacity style={Styles.editSwipe} onPress={() => ref.current?.close()} >
+                <TouchableOpacity style={Styles.editSwipe} onPress={() => onEdit(item)} >
                     <Ionicons name='create-sharp' color={'white'} size={30} />
                 </TouchableOpacity>
-                <TouchableOpacity style={Styles.deleteSwipe} onPress={() => onDelete(id)} >
+                <TouchableOpacity style={Styles.deleteSwipe} onPress={() => onDelete(item)} >
                     <Ionicons name='trash-sharp' color={'white'} size={30} />
                 </TouchableOpacity>
             </View>
         );
     }
 
-    const onDelete = idDelete => {
+    const onDelete = (idDelete) => {
         Alert.alert(
             'Xóa Staff?',
             `Bạn có muốn xóa Staff có ID = ${idDelete}?`,
@@ -75,26 +50,38 @@ const Staff = () => {
                 {
                     text: "OK",
                     onPress: () => {
-                        const dataNew = staff.filter(item => item.id !== idDelete);
-                        setStaff(dataNew);
+                        fetch(`http://192.168.1.3:3000/api/${idDelete}/deleteStaff`, {
+                            method: 'GET',
+                        }).then((res) => { getList() })
                     },
                 }
             ]
         );
     }
 
+    const onEdit = (idEdit) => {
+        navigation.navigate('AddStaff',{
+            id : idEdit.id,
+            password : idEdit.password,
+            role : idEdit.role,
+            name : idEdit.name,
+            phone : idEdit.phone
+        })
+     }
+
     return (
         <View style={Styles.container}>
-            {staff.length === 0 ? null :
-                <FlatList
+            {isLoading
+                ? <Text>Loading...</Text>
+                : <FlatList
                     style={Styles.containerStaff}
-                    data={staff}
+                    data={list}
                     renderItem={({ item }) => (
-                        <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
+                        <Swipeable ref={ref} renderRightActions={() => rightSwipe(item._id)}>
                             <View style={Styles.item}>
                                 <View style={Styles.avatarContainer}>
                                     <Image
-                                        source={{ uri: item.avatar }}
+                                        source={{ uri: 'https://i.pinimg.com/564x/6b/31/33/6b31330ed51b2641e2f19cd73da784d3.jpg' }}
                                         style={Styles.avatar}
                                     />
                                 </View>
@@ -104,7 +91,7 @@ const Staff = () => {
                                     </View>
                                     <Spacer height={5} />
                                     <View style={Styles.rowInfoStaff}>
-                                        <Text style={Styles.position}>{item.position}</Text>
+                                        <Text style={Styles.position}>{item.role}</Text>
                                     </View>
                                     <View style={Styles.contactInfoStaff}>
                                         <View style={Styles.rowInfoStaff}>
@@ -112,8 +99,9 @@ const Staff = () => {
                                         </View>
                                         <Spacer height={2} />
                                         <View style={Styles.rowInfoStaff}>
-                                            <Text style={Styles.email}>Email: {item.email}</Text>
+                                            <Text style={Styles.email}>DateOfBirth: {item.dateOfBirth}</Text>
                                         </View>
+
                                     </View>
                                 </View>
                             </View>

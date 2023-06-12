@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, StyleSheet } from 'react-native';
 
 const AddStaff = () => {
+
+  const {navigation, route} = useNavigation();
+  
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
@@ -16,7 +20,7 @@ const AddStaff = () => {
       'name': name,
       'phone': phone
     };
-    console.log(data);
+    
     const resetForm = () => {
       setId('');
       setPassword('');
@@ -24,26 +28,25 @@ const AddStaff = () => {
       setName('');
       setPhone('');
     };
-    // Send the data to the server using the fetch API or any other network library
+    useEffect()
+
     // Phần này lấy IPV4 của máy '192.168.1.3' thay vào!!!!!!
-    fetch('http://192.168.1.3:3000/signup', {
+    fetch('http://192.168.1.3:3000/api/addStaff', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body:JSON.stringify(data)
     })
       .then(response => {
         // Handle the response from the server
         // For example, you can display a success message or navigate to a new screen
         console.log('Form submitted successfully');
         resetForm();
-        alert('Form submitted successfully');
       })
       .catch(error => {
         // Handle any errors that occurred during the form submission
         console.error('Error submitting form:', error);
-        alert('Error submitting form:', error);
       });
   };
 
