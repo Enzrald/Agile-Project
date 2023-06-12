@@ -14,7 +14,7 @@ const receiptSchema = new schema({
     },
     date: {
         type: String,
-        default: new Date.now()
+        default: Date.now()
     },
     product: { 
         type: Array,
