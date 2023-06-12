@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { Text, View, Image, StyleSheet, useWindowDimensions } from 'react-native';
+import { Text, View, Image, StyleSheet, useWindowDimensions, TouchableHighlight } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import Ionicons from "react-native-vector-icons/Ionicons"
 import Spacer from './Spacer';
@@ -83,6 +83,11 @@ const MainDrawer = () => {
             fontSize: 17,
             fontWeight: 'bold',
           },
+          headerRight: () => (
+            <TouchableHighlight onPress={()=> navigation.navigate('AddProduct')}>
+              <Image source={require("../../assets/add_icon.png")} style={{ width: 25, height: 25, marginRight: 10 }} ></Image>
+            </TouchableHighlight>
+          )
         }}
       />
       <Drawer.Screen
@@ -97,6 +102,11 @@ const MainDrawer = () => {
             fontSize: 17,
             fontWeight: 'bold',
           },
+          headerRight: () => (
+            <TouchableHighlight onPress={()=> navigation.navigate('AddCustomer')}>
+              <Image source={require("../../assets/add_icon.png")} style={{ width: 25, height: 25, marginRight: 10 }} ></Image>
+            </TouchableHighlight>
+          )
         }}
       />
       <Drawer.Screen
@@ -111,6 +121,11 @@ const MainDrawer = () => {
             fontSize: 17,
             fontWeight: 'bold',
           },
+          headerRight: () => (
+            <TouchableHighlight onPress={()=> navigation.navigate('AddReceipt')}>
+              <Image source={require("../../assets/add_icon.png")} style={{ width: 25, height: 25, marginRight: 10 }} ></Image>
+            </TouchableHighlight>
+          )
         }}
       />
       <Drawer.Screen
@@ -125,6 +140,11 @@ const MainDrawer = () => {
             fontSize: 17,
             fontWeight: 'bold',
           },
+          headerRight: () => (
+            <TouchableHighlight onPress={()=> navigation.navigate('AddStaff')}>
+              <Image source={require("../../assets/add_icon.png")} style={{ width: 25, height: 25, marginRight: 10 }} ></Image>
+            </TouchableHighlight>
+          )
         }}
       />
       <Drawer.Screen
@@ -139,6 +159,11 @@ const MainDrawer = () => {
             fontSize: 17,
             fontWeight: 'bold',
           },
+          headerRight: () => (
+            <TouchableHighlight onPress={()=> navigation.navigate('AddStaff')}>
+              <Image source={require("../../assets/add_icon.png")} style={{ width: 25, height: 25, marginRight: 10 }} ></Image>
+            </TouchableHighlight>
+          )
         }}
       />
     </Drawer.Navigator>

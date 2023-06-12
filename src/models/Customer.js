@@ -18,7 +18,7 @@ const customerSchema = new schema({
   
     dateOfBirth: {
         type: String,
-        default: new Date.now()
+        default: Date.now()
     }
 })
 
