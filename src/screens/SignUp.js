@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from "react-native";
+import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
-import Spacer from '../components/Spacer';
-import TouchableButon from '../components/TouchableButton';
+import Spacer from "../components/Spacer";
+import TouchableButon from "../components/TouchableButton";
 
-const Login = () => {
+const SignUp = () => {
     const navigation = useNavigation();
     const [userNameTextInput, setUserNameTextInput] = useState('');
     const [passwordTextInput, setPasswordTextInput] = useState('');
+    const [confirmPasswordTextInput, setConfirmPasswordTextInput] = useState('');
+
     const onValidate = () => {
         if (userNameTextInput.trim() === '' && passwordTextInput.trim() === '') {
             Alert.alert('Missing Information', 'Please enter your email and password');
@@ -23,6 +25,10 @@ const Login = () => {
             Alert.alert('Missing Password', 'Please enter your password');
             return;
         }
+        if (confirmPasswordTextInput.trim() === '') {
+            Alert.alert('Missing Password', 'Please enter confirm your password');
+            return;
+        }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(userNameTextInput)) {
@@ -30,26 +36,22 @@ const Login = () => {
             return;
         }
 
-        if (!(userNameTextInput.trim() === 'nhom1@gmail.com')) {
-            Alert.alert('Error Email', 'Please enter a valid email address');
+        if (passwordTextInput !== confirmPasswordTextInput) {
+            Alert.alert('Error Password', 'Please confirm your password');
             return;
         }
 
-        if (!(passwordTextInput.trim() === '123')) {
-            Alert.alert('Error Password', 'Please enter a valid password');
-            return;
-        }
-
-        onLogin();
+        onSignUp();
     }
-    const onLogin = () => navigation.navigate('MainDrawer');
-    return (
-        <SafeAreaView style={Styles.container}>
-            <View style={Styles.header}>
-                <Image style={Styles.banner} source={require('../../assets/banner.png')} />
-                <Text style={Styles.title}>Sign In</Text>
-            </View>
+    const onSignUp = () => Alert.alert('SignUp Successful', 'Your username is register, please press SignUp');
 
+    return (
+        <View style={Styles.container}>
+            <Spacer height={20}/>
+            <Image style={Styles.banner} source={require('../../assets/banner.png')} />
+            <Spacer height={10} />
+            <Text style={Styles.title}>Sign Up</Text>
+            <Spacer height={30} />
             <View style={Styles.textInputContainer}>
                 <TextInput
                     style={Styles.textInput}
@@ -67,31 +69,35 @@ const Login = () => {
                     secureTextEntry={true}
                     onChangeText={text => setPasswordTextInput(text)}
                 />
-                <TouchableOpacity style={Styles.register} onPress={() => navigation.navigate('SignUpScreen')}>
-                    <Text style={Styles.textRegister}>Don't have an account? Register</Text>
+                <Spacer height={20} />
+                <TextInput
+                    style={Styles.textInput}
+                    placeholder="Confirm Passwords"
+                    placeholderTextColor="#333"
+                    value={confirmPasswordTextInput}
+                    secureTextEntry={true}
+                    onChangeText={text => setConfirmPasswordTextInput(text)}
+                />
+                <TouchableOpacity style={Styles.signIn} onPress={() => navigation.navigate('LoginScreen')}>
+                    <Text style={Styles.textSignIn}>Already have an account? SignIn</Text>
                 </TouchableOpacity>
                 <Spacer height={50} />
-                <TouchableButon title={'Login'} textStyle={{ color: 'white' }} buttonStyle={{ backgroundColor: '#8F5D08' }} onPress={() => onLogin()} />
+                <TouchableButon title={'Sign Up'} textStyle={{ color: 'white' }} buttonStyle={{ backgroundColor: '#8F5D08' }} onPress={() => onValidate()} />
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 
-export default Login;
+export default SignUp;
 
 const Styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        width: '100%',
-        height: '100%',
-    },
-    header: {
-        width: '100%',
-        height: '60%',
+        flex: 1,
     },
     banner: {
+        height:  '30%',
         width: '100%',
-        height: '55%',
     },
     title: {
         fontSize: 36,
@@ -103,7 +109,6 @@ const Styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 5,
         alignItems: 'center',
-        marginTop: -100,
     },
     textInput: {
         width: '85%',
@@ -114,11 +119,11 @@ const Styles = StyleSheet.create({
         borderRadius: 5,
         color: '#333',
     },
-    register: {
+    signIn: {
         marginTop: 20,
     },
-    textRegister: {
+    textSignIn: {
         fontSize: 14,
         color: '#333'
-    }
+    },
 });
