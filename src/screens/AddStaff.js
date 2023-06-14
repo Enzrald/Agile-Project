@@ -28,7 +28,11 @@ const AddStaff = () => {
       setName('');
       setPhone('');
     };
-    useEffect()
+
+
+
+    ///Thiếu sửa 
+
 
     // Phần này lấy IPV4 của máy '192.168.1.3' thay vào!!!!!!
     fetch('http://192.168.1.3:3000/api/addStaff', {

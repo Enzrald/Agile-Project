@@ -8,6 +8,10 @@ const productSchema = new schema({
         type: String,
         required: true,
     },
+    idCategory: {
+        type: Number,   
+        required: true,
+    },
     name: {
         type: String,
         required: true,
@@ -15,7 +19,7 @@ const productSchema = new schema({
     price: {
         type: Number,
     },
-  
+
 })
 
 // Model
