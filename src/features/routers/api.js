@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Employee = require('../../models/Employee ');
 const Product = require('../../models/Product');
+const Customer = require('../../models/Customer');
 const router = express.Router();
 
 
@@ -59,6 +60,35 @@ router.get('/getProduct', async (req, res) => {
 
 router.get('/:id/deleteProduct', (req, res) => {
     Product.findOneAndRemove({ _id: req.params.id })
+        .then(result => {
+            console.log(result);
+            res.json(result)
+        })
+})
+
+router.post('/addCustomer', (req, res) => {
+    const { id, name, phone , adress } = req.body;
+    console.log(req.body);
+
+    try {
+        const customer = new Customer({ id: id, name: name, phone: phone , adress: adress });
+        customer.save().then(() => { console.log(req.body); });
+    } catch (err) {
+        res.status(422).send(err.message);
+    }
+
+});
+
+router.get('/getCustomer', async (req, res) => {
+    await Customer.find({})
+        .then(result => {
+            console.log(result);
+            res.json(result);
+        })
+});
+
+router.get('/:id/deleteCustomer', (req, res) => {
+    Customer.findOneAndRemove({ _id: req.params.id })
         .then(result => {
             console.log(result);
             res.json(result)

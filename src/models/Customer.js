@@ -15,7 +15,9 @@ const customerSchema = new schema({
     phone: {
         type: String,
     },
-  
+    adress :{
+        type: String,
+    },
     dateOfBirth: {
         type: String,
         default: Date.now()

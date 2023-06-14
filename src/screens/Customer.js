@@ -1,63 +1,27 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, FlatList, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import Spacer from "../components/Spacer";
+import { useIsFocused } from "@react-navigation/native";
 
 const Customer = () => {
     const ref = useRef();
-    const [customer, setCustomer] = useState([
-        {
-            id: 0,
-            avatar: 'https://i.pinimg.com/564x/64/37/05/64370541d9b8e5107b33afe98bc2b988.jpg',
-            name: 'Nguyen Sy Tung',
-            email: 'tungnsph25350@fpt.edu.vn',
-            address: 'Van Canh - Hoai Duc - Ha Noi'
-        },
-        {
-            id: 1,
-            avatar: 'https://i.pinimg.com/564x/4f/61/28/4f6128a7b8008fee5e674056a6867642.jpg',
-            name: 'nstungg',
-            email: 'tungnsph25350@fpt.edu.vn',
-            address: 'Van Canh - Hoai Duc - Ha Noi'
-        },
-        {
-            id: 2,
-            avatar: 'https://i.pinimg.com/564x/63/1d/21/631d21d0ebe8c726b8074b7de28a6dc5.jpg',
-            name: 'nstung7323',
-            email: 'tungnsph25350@fpt.edu.vn',
-            address: 'Van Canh - Hoai Duc - Ha Noi'
-        },
-    ]);
+    const isFocused = useIsFocused();
+    const [list, setList] = useState([]);
+    const [isLoading, setLoading] = useState(true);
 
 
-    const itemView = item => {
-        return (
-            <Swipeable ref={ref} renderRightActions={() => rightSwipe(item.id)}>
-                <View style={Styles.item}>
-                    <View style={Styles.avatarContainer}>
-                        <Image
-                            source={{ uri: item.avatar }}
-                            style={Styles.avatar}
-                        />
-                    </View>
-                    <View style={Styles.info}>
-                        <View style={Styles.rowInfo}>
-                            <Text style={Styles.name}>{item.name}</Text>
-                        </View>
-                        <Spacer height={5} />
-                        <View style={Styles.rowInfo}>
-                            <Text style={Styles.email}>{item.email}</Text>
-                        </View>
-                        {/* <Spacer height={5} />
-                        <View style={Styles.rowInfo}>
-                            <Text style={Styles.address}>{item.address}</Text>
-                        </View> */}
-                    </View>
-                </View>
-            </Swipeable>
-        );
+    const getList = () => {
+        fetch('http://192.168.1.3:3000/api/getCustomer')
+            .then(response => response.json())
+            .then((data) => { setList(data); setLoading(false); })
+            .then((error) => console.log(error))
     }
+    useEffect(() => {
+        getList()
+    }, [isFocused]);
+
 
     const rightSwipe = (id) => {
         return (
@@ -85,8 +49,9 @@ const Customer = () => {
                 {
                     text: "OK",
                     onPress: () => {
-                        const dataNew = customer.filter(item => item.id !== idDelete);
-                        setCustomer(dataNew);
+                        fetch(`http://192.168.1.3:3000/api/${idDelete}/deleteCustomer`, {
+                            method: 'GET',
+                        }).then((res) => { getList() })
                     },
                 }
             ]
@@ -95,20 +60,36 @@ const Customer = () => {
 
     return (
         <View style={Styles.container}>
-            {customer.length == 0 ? null :
-                <FlatList
+            {isLoading
+                ? <Text>Loading...</Text>
+                : <FlatList
                     style={Styles.containerCustomer}
-                    data={customer}
-                    // ListHeaderComponent={
-                    //     <>
-                    //         <Spacer height={20} />
-                    //         <Text style={Styles.listHeaderLine}>Shop Manager</Text>
-                    //     </>
-                    // }
-                    // ListHeaderComponentStyle={Styles.listHeader}
-                    // ItemSeparatorComponent={<View style={Styles.separator} />}
-                    renderItem={
-                        ({ item }) => itemView(item)
+                    data={list}
+                    renderItem={({ item }) => (
+                        <Swipeable ref={ref} renderRightActions={() => rightSwipe(item._id)}>
+                            <View style={Styles.item}>
+                                <View style={Styles.avatarContainer}>
+                                    <Image
+                                        source={{ uri: 'https://i.pinimg.com/564x/64/37/05/64370541d9b8e5107b33afe98bc2b988.jpg' }}
+                                        style={Styles.avatar}
+                                    />
+                                </View>
+                                <View style={Styles.info}>
+                                    <View style={Styles.rowInfo}>
+                                        <Text style={Styles.name}>{item.name}</Text>
+                                    </View>
+                                    <Spacer height={5} />
+                                    <View style={Styles.rowInfo}>
+                                        <Text style={Styles.email}>{item.adress}</Text>
+                                    </View>
+                                    <Spacer height={5} />
+                                    <View style={Styles.rowInfo}>
+                                        <Text style={Styles.email}>{item.phone}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </Swipeable>
+                    )
                     }
                     keyExtractor={(item) => item.id}
                 />
