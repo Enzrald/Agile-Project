@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const currentDate = new Date(Date.now());
 
 // schema
 const schema = mongoose.Schema;
@@ -15,12 +16,13 @@ const customerSchema = new schema({
     phone: {
         type: String,
     },
-    adress :{
+    adress: {
         type: String,
     },
     dateOfBirth: {
         type: String,
-        default: Date.now()
+        default: ` ${currentDate.getHours()}:${currentDate.getMinutes()} : ${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`
+
     }
 })
 

@@ -1,44 +1,51 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import Swiper from 'react-native-swiper';
 
-import { View } from 'react-native';
+const Home = () => {
+  const swiperRef = useRef(null);
 
-import DropDownPicker from 'react-native-dropdown-picker';
-
-export default function Home() {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(['italy', 'spain', 'barcelona', 'finland']);
-  const [items, setItems] = useState([
-    {label: 'Spain', value: 'spain'},
-    {label: 'Madrid', value: 'madrid', parent: 'spain'},
-    {label: 'Barcelona', value: 'barcelona', parent: 'spain'},
-
-    {label: 'Italy', value: 'italy'},
-    {label: 'Rome', value: 'rome', parent: 'italy'},
-
-    {label: 'Finland', value: 'finland'}
-  ]);
+  const handleAutoPlay = () => {
+    if (swiperRef && swiperRef.current) {
+      swiperRef.current.scrollBy(1, true);
+    }
+  };
 
   return (
-    <View style={{
-      backgroundColor: '#171717',
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingHorizontal: 15
-    }}>
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
+    <Swiper
+      ref={swiperRef}
+      style={styles.wrapper}
+      autoplay={true}
+      autoplayTimeout={3} // Specify the timeout in seconds
+      onIndexChanged={handleAutoPlay} // This callback will be called when the slide changes
+    >
+      <View style={styles.slide}>
+        <Image source={require('../../assets/cp1.jpg')}></Image>
+      </View>
+      <View style={styles.slide}>
+        <Image source={require('../../assets/cp2.jpg')}></Image>
 
-        theme="DARK"
-        multiple={true}
-        mode="BADGE"
-        badgeDotColors={["#e76f51", "#00b4d8", "#e9c46a", "#e76f51", "#8ac926", "#00b4d8", "#e9c46a"]}
-      />
-    </View>
+      </View>
+      <View style={styles.slide}>
+        <Image source={require('../../assets/cp3.jpg')}></Image>
+
+      </View>
+    </Swiper>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  wrapper: {},
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#eaeaea',
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+});
+
+export default Home;

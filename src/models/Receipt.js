@@ -1,31 +1,32 @@
 const mongoose = require('mongoose');
+const currentDate = new Date(Date.now());
 
 // schema
 const schema = mongoose.Schema;
 const receiptSchema = new schema({
 
-    customer: {
-        type: Array,
+    selectedCustomer: {
+        type: String,
         required: true,
     },
-    employee : {
-        type: Array,
+    selectedEmployee: {
+        type: String,
         required: true,
     },
     date: {
         type: String,
-        default: Date.now()
+        default: `${currentDate.getHours()}:${currentDate.getMinutes()} : ${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`
     },
-    product: { 
-        type: Array,
+    selectedProduct: {
+        type: String,
         required: true
     },
     quantity: {
         type: Number,
         default: 0
     },
-    sale:{
-        type : Number,
+    sale: {
+        type: Number,
         default: 0
     },
     total: {
@@ -35,9 +36,9 @@ const receiptSchema = new schema({
     description: {
         type: String,
     }
-    
 
-  
+
+
 })
 
 // Model

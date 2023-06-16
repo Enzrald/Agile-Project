@@ -42,6 +42,8 @@ const AddProduct = () => {
         })
             .then(response => {
                 resetForm();
+                Alert.alert('Form submitted successfully');
+
             })
            
     };

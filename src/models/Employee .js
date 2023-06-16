@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-
 // schema
+const currentDate = new Date(Date.now());
+
 const schema = mongoose.Schema;
 const employeeSchema = new schema({
 
@@ -26,7 +27,7 @@ const employeeSchema = new schema({
     },
     dateOfBirth: {
         type: String,
-        default:  Date.now()
+        default:  ` ${currentDate.getHours()}:${currentDate.getMinutes()} : ${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`
     }
 })
 

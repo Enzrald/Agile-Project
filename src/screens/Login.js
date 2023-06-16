@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Spacer from '../components/Spacer';
 import TouchableButon from '../components/TouchableButton';
-
+import axios from 'axios';
 const Login = () => {
     const navigation = useNavigation();
     const [userNameTextInput, setUserNameTextInput] = useState('');
@@ -30,6 +30,7 @@ const Login = () => {
             return;
         }
 
+        
         if (!(userNameTextInput.trim() === 'nhom1@gmail.com')) {
             Alert.alert('Error Email', 'Please enter a valid email address');
             return;
@@ -39,10 +40,26 @@ const Login = () => {
             Alert.alert('Error Password', 'Please enter a valid password');
             return;
         }
+        navigation.navigate('MainDrawer');
 
-        onLogin();
+        // const data = {
+        //    'id' : userNameTextInput,
+        //    'password' : passwordTextInput,
+        // };
+        // fetch('http://192.168.1.3:3000/api/login', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(data)
+        // })
+        //     .then((response) => {
+        //         console.log(response.data.id);
+        //     })
+                
+
     }
-    const onLogin = () => navigation.navigate('MainDrawer');
+    const onLogin = () => onValidate();
     return (
         <SafeAreaView style={Styles.container}>
             <View style={Styles.header}>

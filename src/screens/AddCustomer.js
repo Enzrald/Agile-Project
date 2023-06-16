@@ -45,6 +45,8 @@ const AddCustomer = () => {
                 // Handle the response from the server
                 // For example, you can display a success message or navigate to a new screen
                 console.log('Form submitted successfully');
+                Alert.alert('Form submitted successfully');
+
                 resetForm();
             })
             .catch(error => {
